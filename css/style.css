@@ -1,0 +1,28 @@
+body {
+    /* color:#fafafa; */
+    /* color: #f5f5f5; */
+    background-image: url(../images/hexagon-transparent-30.png);
+}
+
+h1 {
+    /* font-family: 'Bebas Neue', cursive; */
+    font-family: 'Bungee Inline', cursive;  
+    /* font-family: 'Nunito', sans-serif; */
+    /* font-family: 'Dosis', sans-serif;   */
+    text-align: center;
+    font-size: 70px;
+    /* color: #f5f5f5; */
+    color: #d50000;
+    /* text-shadow: -1.5px -1.5px 0 #d50000, 1.5px -1.5px 0 #d50000, -1.5px 1.5px 0 #d50000, 1.5px 1.5px 0 #d50000 */
+
+}
+
+.btn {
+    background-color: #d50000;
+    border-radius: 10px;
+}
+
+.btn:hover {
+    background-color: #f5f5f5;
+    color: #d50000;
+}
