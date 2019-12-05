@@ -24,7 +24,7 @@ $(document).ready(function() {
     });
 
     $("#submit-button").on("click", function() {
-        var dateChoice = $(".datepicker").datepicker({ dateFormat: "yy-mm-dd" });
+        var dateChoice = $(".datepicker").val();
         console.log(dateChoice);
     });
 
