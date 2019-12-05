@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Bebas+Neue|Bungee+Inline|Dosis:800|Modak|Nunito:700&display=swap" rel="stylesheet">
     <!-- <link rel="stylesheet" href="css/materialize.css"> -->
     <!-- <script type="text/javascript" src="js/materialize.js"></script> -->
@@ -16,6 +17,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/app2.js"></script>
 
     <title>Night Out</title>
 </head>
@@ -26,8 +28,8 @@
     <div class="container">
         <!-- first input field - "What?" -->
         <div class="row">
-            <div class="input-field col s8 offset-s2">
-                <select>
+            <div class="input-field col s8 offset-s2" id="what">
+                <select name="dropdown">
                     <option value="" disabled selected>What would you like to do?</option>
                     <option>See a Concert</option>
                     <option>Go to a Game</option>
@@ -39,7 +41,7 @@
 
         <!-- second input field - "Where?" -->
         <div class="row">
-            <div class="input-field col s8 offset-s2">
+            <div class="input-field col s8 offset-s2" id= "where">
                 <input id="email" type="text" class="validate">
                 <label for="email">Where would you like to do it?</label>
             </div>
@@ -47,20 +49,30 @@
 
         <!-- third input field - "When?" -->
         <div class="row">
-            <div class="input-field col s8 offset-s2">
-                <input type="text" class="datepicker">
+            <div class="input-field col s8 offset-s2" id="when">
+                <input type="text" class="datepicker" id="the-date">
                 <label>When would you like to do it?</label>
             </div>
         </div>
 
         <!-- submit button -->
         <div class="row">
-            <div class="col s8 offset-s2">
+            <div class="col s8 offset-s2" id="submit-button">
                 <button class="btn waves-effect waves-light btn-small" type="submit" name="action">Submit
                     <i class="material-icons right">send</i>
                 </button>
             </div>
         </div>
+
+        <!-- next button to move into next screen for after asking where -->
+        <div class="row">
+            <div class="col s8 offset-s2" id="next-button">
+                <button class="btn waves-effect waves-light btn-small" type="submit" name="action">Next
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </div>
+
 
 
 
