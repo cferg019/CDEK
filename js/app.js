@@ -3,17 +3,12 @@ $(document).ready(function () {
   // Declaring variables to be used in API search
   var activityChoice;
   var placeChoice;
-  var dateChoice;
   var artistChoice;
   var teamChoice;
   var diningChoice;
 
-
   //Initializing drop down menu
   $('select').formSelect();
-
-  // Initializing calendar
-  $('.datepicker').datepicker({ autoClose: true });
 
   // hiding question divs other than "what are you in the mood for"
   $("#when").hide();
@@ -31,28 +26,22 @@ $(document).ready(function () {
     console.log(activityChoice);
     $("#what").hide();
     $("#where").show();
-    $("#next-button").show();
+    
+    if (activityChoice === "Have a Drink")
+      $("#results-button").show();
+    else {
+      $("#submit-button").show();
+    }
   });
 
   // When next button is selected, the place chosen is stored, this div is hidden, and the div with the next question is shown.
-  $("#next-button").on("click", function () {
+  $("#submit-button").on("click", function () {
     placeChoice = $("#email").val().trim();
     console.log(placeChoice);
     $("#where").hide();
     $("#next-button").hide();
-    $("#when").show();
-    $("#submit-button").show();
-  });
-
-  // When submit button is selected, the date is selected, the next relevant question div is shown based on activity.
-  $("#submit-button").on("click", function () {
-    dateChoice = $(".datepicker").val().trim();
-    console.log(dateChoice);
-    $("#when").hide();
-    $("#submit-button").hide();
     $("#results-button").show();
-
-    console.log(activityChoice)
+    $("#submit-button").hide();
 
     if (activityChoice === "See a Concert") {
       $("#artist").show(); 
@@ -75,6 +64,9 @@ $(document).ready(function () {
     } else if (activityChoice === "Eat Out") {
       diningChoice = $("#foodType").val().trim()
       console.log(diningChoice);
+    } else if (activityChoice === "Have a Drink") {
+      placeChoice = $("#email").val().trim();
+      console.log(placeChoice);
     }
     
     // API Code Here
