@@ -92,7 +92,7 @@ $(document).ready(function () {
         var stateCity = $("<h2>").text(response.city);
         var stateName = $("<h2>").text(response.name);
         var stateAddress = $("<h2>").text(response.Stree + ", " + State + ", " + Postal_Code);
-        var stateWebsite = $("<h2>").text(response.website_url);
+        var stateWebsite = $("<h2>").attr("src", response.website_url);
     
         $("").empty();
         $("#result").append(stateType, stateCity, stateName, stateAddress, stateWebsite);
@@ -106,6 +106,12 @@ $(document).ready(function () {
         url: eventURL,
         method: "GET"
       }).then(function (response) {
+
+        var eventName = $("h1").text(response.name);
+        var eventDescription = $("h2").text(response.description);
+        var eventWebstite = $("h2").attr("src", response.url);
+
+
         console.log(response);
       });
     }
