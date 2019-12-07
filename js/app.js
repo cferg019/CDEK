@@ -74,23 +74,40 @@ $(document).ready(function () {
 
     // API Code Here
 
-    function openBrewery(state) {
+    function openBrewery(placeChoice) {
 
-      var brewryURL = "https://api.openbrewerydb.org/breweries?by_name=cooper&by_state=" + state;
+      var brewryURL = "https://api.openbrewerydb.org/breweries?&by_state=" + placeChoice + "&limit=5";
+
       $.ajax({
         url: brewryURL,
         method: "GET"
       }).then(function (response) {
         console.log(response);
+        var results = response.data;
 
-        var stateType = $("<h1>").text(response.brewery_type);
-        var stateCity = $("<h2>").text(response.city);
-        var stateName = $("<h2>").text(response.name);
-        var stateAddress = $("<h2>").text(response.Stree + ", " + State + ", " + Postal_Code);
-        var stateWebsite = $("<h2>").attr("src", response.website_url);
+        // var displayInfo = {
+        //   City: response[i].city,
+        //   Name: response[i].name,
+        //   Address: [response[i].street + response[i].state + response[i].postal_code]
+        // }
+
+        for (var i = 0; i < 5 ; i++) {
+
+            var resultDiv = $("#result");
+            resultDiv.append(results[i].city)
+      
+        }
+
+        // var newDiv = $("resultsDiv").append(displayInfo);
+        // var stateType = $("<p>").text(response.brewery_type);
+        // var stateCity = $("<p>").text(response.city);
+        // var stateName = $("<p>").text(response.name);
+        // var stateAddress = $("<p>").text(response.street + ", " + response.state + ", " + response.postal_code);
+        // var stateWebsite = $("<p>").attr("src", response.website_url);
     
-        $("").empty();
-        $("#result").append(stateType, stateCity, stateName, stateAddress, stateWebsite);
+        // // $("#result").append(stateType, stateCity, stateName, stateAddress, stateWebsite);
+        // console.log(stateType, stateCity, stateName, stateAddress, stateWebsite);
+        
     
       });
     }
@@ -113,8 +130,7 @@ $(document).ready(function () {
 
 // search function:
 
-openBrewery(inputState);
-ticketMaster(inputEvent);
+openBrewery(placeChoice);
 
 
   });
