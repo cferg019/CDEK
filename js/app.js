@@ -88,20 +88,20 @@ $(document).ready(function () {
       }).then(function (response) {
         console.log(response);
 
-        var stateType = $("").text(response.brewery_type);
-        var stateCity = $("").text(response.city);
-        var stateName = $("").text(response.name);
-        var stateAddress = $("").text(response.Stree + ", " + State + ", " + Postal_Code);
-        var stateWebsite = $("").text(response.website.url)
+        var stateType = $("<h1>").text(response.brewery_type);
+        var stateCity = $("<h2>").text(response.city);
+        var stateName = $("<h2>").text(response.name);
+        var stateAddress = $("<h2>").text(response.Stree + ", " + State + ", " + Postal_Code);
+        var stateWebsite = $("<h2>").text(response.website_url);
     
         $("").empty();
-        $("").append(stateType, stateCity, stateName, stateAddress, stateWebsite);
+        $("#result").append(stateType, stateCity, stateName, stateAddress, stateWebsite);
     
       });
     }
 
     function ticketMaster(event) {
-      var eventURL = "https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=lGxG3vAdLmUCh0Ip0y4Rx2KfHRHxfG5r"
+      var eventURL = "https://app.ticketmaster.com/discovery/v2/events.json?keyword=" + search + "&source=universe&countryCode=US&apikey=lGxG3vAdLmUCh0Ip0y4Rx2KfHRHxfG5r";
       $.ajax({
         url: eventURL,
         method: "GET"
