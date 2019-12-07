@@ -54,18 +54,21 @@ $(document).ready(function () {
 
   // Final information is stored.  Begin API query.
   $("#results-button").on("click", function () {
-
     if (activityChoice === "See a Concert") {
       artistChoice = $("#concertArtist").val().trim();
+      $("#concertArtist").val("");
       console.log(artistChoice);
     } else if (activityChoice === "Go to a Game") {
       teamChoice = $("#sportsTeam").val().trim();
+      $("#sportsTeam").val("");
       console.log(teamChoice);
     } else if (activityChoice === "Eat Out") {
-      diningChoice = $("#foodType").val().trim()
+      diningChoice = $("#foodType").val().trim();
+      $("#foodType").val("");
       console.log(diningChoice);
     } else if (activityChoice === "Have a Drink") {
       placeChoice = $("#email").val().trim();
+      $("#email").val("");
       console.log(placeChoice);
     }
     
