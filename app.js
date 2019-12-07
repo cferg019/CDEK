@@ -32,8 +32,11 @@ var brewryURL = "https://api.openbrewerydb.org/breweries?by_name=cooper&by_state
 
     var stateCity = $("").text(response.city);
     var stateName = $("").text(response.name);
-    var stateAddress = $("").text(response.Stree + State + Postal_Code);
-    var 
+    var stateAddress = $("").text(response.Stree + ", " + State + ", " + Postal_Code);
+    var stateWebsite = $("").text(response.website.url)
+
+    $("").empty();
+    $("").append(stateCity, stateName, stateAddress, stateWebsite);
 
     });
 }

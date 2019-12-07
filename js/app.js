@@ -21,7 +21,7 @@ $(document).ready(function () {
   $("#submit-button").hide();
   $("#next-button").hide();
   $("#artist").hide();
-  $("#team").hide(); 
+  $("#team").hide();
   $("#dining").hide();
   $("#results-button").hide();
 
@@ -55,7 +55,7 @@ $(document).ready(function () {
     console.log(activityChoice)
 
     if (activityChoice === "See a Concert") {
-      $("#artist").show(); 
+      $("#artist").show();
     } else if (activityChoice === "Go to a Game") {
       $("#team").show();
     } else if (activityChoice === "Eat Out") {
@@ -76,8 +76,54 @@ $(document).ready(function () {
       diningChoice = $("#foodType").val().trim()
       console.log(diningChoice);
     }
-    
+
     // API Code Here
+
+    function openBrewery(state) {
+
+      var brewryURL = "https://api.openbrewerydb.org/breweries?by_name=cooper&by_state=" + state;
+      $.ajax({
+        url: brewryURL,
+        method: "GET"
+      }).then(function (response) {
+        console.log(response);
+
+        var stateType = $("").text(response.brewery_type);
+        var stateCity = $("").text(response.city);
+        var stateName = $("").text(response.name);
+        var stateAddress = $("").text(response.Stree + ", " + State + ", " + Postal_Code);
+        var stateWebsite = $("").text(response.website.url)
+    
+        $("").empty();
+        $("").append(stateType, stateCity, stateName, stateAddress, stateWebsite);
+    
+      });
+    }
+
+    function ticketMaster(event) {
+      var eventURL = "https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=lGxG3vAdLmUCh0Ip0y4Rx2KfHRHxfG5r"
+      $.ajax({
+        url: eventURL,
+        method: "GET"
+      }).then(function (response) {
+        console.log(response);
+      });
+    }
+
+// search function:
+
+openBrewery(inputState);
+ticketMaster(inputEvent);
+
+
   });
 
+
+
 });
+
+
+
+
+
+
