@@ -26,7 +26,7 @@ $(document).ready(function () {
     console.log(activityChoice);
     $("#what").hide();
     $("#where").show();
-    
+
     if (activityChoice === "Have a Drink")
       $("#results-button").show();
     else {
@@ -76,7 +76,7 @@ $(document).ready(function () {
 
     function openBrewery(placeChoice) {
 
-      
+
       var brewryURL = "https://api.openbrewerydb.org/breweries?&by_state=" + placeChoice;
       $.ajax({
         url: brewryURL,
@@ -85,18 +85,17 @@ $(document).ready(function () {
         console.log(response);
         var results = response.data;
 
+        for (var i = 0; i < response.data.length; i++) {
+
+          var resultDiv = $("#result");
+          resultDiv.text(results[i].city)
+
+        }
         // var displayInfo = {
         //   City: response[i].city,
         //   Name: response[i].name,
         //   Address: [response[i].street + response[i].state + response[i].postal_code]
         // }
-
-        for (var i = 0; i < 5 ; i++) {
-
-            var resultDiv = $("#result");
-            resultDiv.text(results[i].city)
-      
-        }
 
         // var newDiv = $("resultsDiv").append(displayInfo);
         // var stateType = $("<p>").text(response.brewery_type);
@@ -104,11 +103,11 @@ $(document).ready(function () {
         // var stateName = $("<p>").text(response.name);
         // var stateAddress = $("<p>").text(response.street + ", " + response.state + ", " + response.postal_code);
         // var stateWebsite = $("<p>").attr("src", response.website_url);
-    
+
         // // $("#result").append(stateType, stateCity, stateName, stateAddress, stateWebsite);
         // console.log(stateType, stateCity, stateName, stateAddress, stateWebsite);
-        
-    
+
+
       });
     }
 
@@ -119,18 +118,20 @@ $(document).ready(function () {
         method: "GET"
       }).then(function (response) {
 
-        var eventName = $("<p>").text(response.name);
-        var eventDescription = $("<p>").text(response.description);
-        var eventWebstite = $("<p>").attr("src", response.url);
+        var placeChoiceName = $("<p>").append(response.embedded.events.name);
+        var placeChoiceVenues = $("<p>").append(response.embedded.events.venues.name)
+        var placeChoiceUrl = $("<p>").attr("src", response.embedded.events.url);
+        var placeChoiceDate = $("<p>").append(response.embedded.events.date);
+        var placeChoice = $("<p>").append(response.embedded.events.priceRanges.min + response.embedded.events.priceRanges.max)
 
 
         console.log(response);
       });
     }
 
-// search function:
+    // search function:
 
-openBrewery(placeChoice);
+    openBrewery(placeChoice);
 
 
   });
