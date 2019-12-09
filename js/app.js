@@ -11,6 +11,8 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+var database = firebase.database();
+
 $(document).ready(function () {
 
   // Declaring variables to be used in API search
