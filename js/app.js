@@ -76,8 +76,8 @@ $(document).ready(function () {
 
     function openBrewery(placeChoice) {
 
-      var brewryURL = "https://api.openbrewerydb.org/breweries?&by_state=" + placeChoice + "&limit=5";
-
+      
+      var brewryURL = "https://api.openbrewerydb.org/breweries?&by_state=" + placeChoice;
       $.ajax({
         url: brewryURL,
         method: "GET"
@@ -94,7 +94,7 @@ $(document).ready(function () {
         for (var i = 0; i < 5 ; i++) {
 
             var resultDiv = $("#result");
-            resultDiv.append(results[i].city)
+            resultDiv.text(results[i].city)
       
         }
 
@@ -112,16 +112,16 @@ $(document).ready(function () {
       });
     }
 
-    function ticketMaster(event) {
-      var eventURL = "https://app.ticketmaster.com/discovery/v2/events.json?keyword=" + search + "&source=universe&countryCode=US&apikey=lGxG3vAdLmUCh0Ip0y4Rx2KfHRHxfG5r";
+    function ticketMaster(placeChoice) {
+      var eventURL = "https://app.ticketmaster.com/discovery/v2/events.json?keyword=concert&locale=en-us&apikey=lGxG3vAdLmUCh0Ip0y4Rx2KfHRHxfG5r";
       $.ajax({
         url: eventURL,
         method: "GET"
       }).then(function (response) {
 
-        var eventName = $("h1").text(response.name);
-        var eventDescription = $("h2").text(response.description);
-        var eventWebstite = $("h2").attr("src", response.url);
+        var eventName = $("<p>").text(response.name);
+        var eventDescription = $("<p>").text(response.description);
+        var eventWebstite = $("<p>").attr("src", response.url);
 
 
         console.log(response);
