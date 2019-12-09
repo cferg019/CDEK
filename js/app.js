@@ -1,3 +1,18 @@
+// Your web app's Firebase configuration
+var firebaseConfig = {
+  apiKey: "AIzaSyCQ70Sp4YCE4VNGzu7sgpvhTP2-jc09810",
+  authDomain: "cdek-e5b2e.firebaseapp.com",
+  databaseURL: "https://cdek-e5b2e.firebaseio.com",
+  projectId: "cdek-e5b2e",
+  storageBucket: "cdek-e5b2e.appspot.com",
+  messagingSenderId: "537136191482",
+  appId: "1:537136191482:web:4de06e5866b16000cb3643"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+var database = firebase.database();
+
 $(document).ready(function () {
 
   // Declaring variables to be used in API search
@@ -16,7 +31,7 @@ $(document).ready(function () {
   $("#submit-button").hide();
   $("#next-button").hide();
   $("#artist").hide();
-  $("#team").hide(); 
+  $("#team").hide();
   $("#dining").hide();
   $("#results-button").hide();
 
@@ -26,7 +41,7 @@ $(document).ready(function () {
     console.log(activityChoice);
     $("#what").hide();
     $("#where").show();
-    
+
     if (activityChoice === "Have a Drink")
       $("#results-button").show();
     else {
@@ -44,7 +59,7 @@ $(document).ready(function () {
     $("#submit-button").hide();
 
     if (activityChoice === "See a Concert") {
-      $("#artist").show(); 
+      $("#artist").show();
     } else if (activityChoice === "Go to a Game") {
       $("#team").show();
     } else if (activityChoice === "Eat Out") {
@@ -71,7 +86,7 @@ $(document).ready(function () {
       $("#email").val("");
       console.log(placeChoice);
     }
-    
+
     // API Code Here
   });
 
