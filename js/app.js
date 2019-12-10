@@ -193,16 +193,16 @@ $(document).ready(function () {
                         '<h6 style="font-weight: bold;">' + result.title + '</h6>' + 
                         '<p>' + result.location + '</p>' + 
                         '<p>' + result.desc + '</p>' + 
-                    '</div>';
+                    '</div>' +
+                    '<div class="card-action">';
       
       if (result.url) {
         rowPart1 = rowPart1 + 
-          '<div class="card-action">' + 
-            '<a href="' + result.url + '">Link</a>' + 
-          '</div>';
+            '<a href="' + result.url + '">Link</a>';
       }
                     
       var rowPart2 =
+              '</div>' + 
             '</div>' +
           '</div>' + 
         '</div>' + 
@@ -300,7 +300,7 @@ $(document).ready(function () {
           var result = {
             title: items[i].venue.name,
             location: items[i].venue.location.formattedAddress.join(', '),
-            imgURL: 'https://cdn4.iconfinder.com/data/icons/social-media-logos-6/512/73-foursquare-512.png',
+            imgURL: 'https://is5-ssl.mzstatic.com/image/thumb/Purple113/v4/0c/e4/f2/0ce4f225-605e-dfed-c858-00d31ce39e5f/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/246x0w.png',
             desc: ''
           }
           results.push(result)
@@ -329,13 +329,13 @@ $(document).ready(function () {
     console.log(databasePlace);
     console.log("hello");
 
-    var addRow = $("<tr>").append(
+    var addRow = $("<tr>").prepend(
           $("<td>").text(databaseActivity),
           $("<td>").text(databasePlace),
           $("<td>").text(""),
       );
 
-      $("#searches > table > tbody").append(addRow);
+      $("#searches > table > tbody").prepend(addRow);
   });
 
   database.ref("game").on("child_added", function(childSnapshot) {
@@ -347,13 +347,13 @@ $(document).ready(function () {
     console.log(databasePlace);
     console.log("hello");
 
-    var addRow = $("<tr>").append(
+    var addRow = $("<tr>").prepend(
       $("<td>").text(databaseActivity),
       $("<td>").text(databasePlace),
       $("<td>").text(""),
     );
 
-    $("#searches > table > tbody").append(addRow);
+    $("#searches > table > tbody").prepend(addRow);
   });
 
 
@@ -369,13 +369,13 @@ $(document).ready(function () {
     console.log("hello");
 
     
-    var addRow = $("<tr>").append(
+    var addRow = $("<tr>").prepend(
       $("<td>").text(databaseActivity),
       $("<td>").text(databasePlace),
       $("<td>").text(databaseDining),
     );
         
-    $("#searches > table > tbody").append(addRow);
+    $("#searches > table > tbody").prepend(addRow);
   });
 
 
@@ -387,13 +387,13 @@ $(document).ready(function () {
     console.log(databaseActivity);
     console.log(databasePlace);
 
-    var addRow = $("<tr>").append(
+    var addRow = $("<tr>").prepend(
       $("<td>").text(databaseActivity),
       $("<td>").text(databasePlace),
       $("<td>").text(""),
       );
 
-    $("#searches > table > tbody").append(addRow);
+    $("#searches > table > tbody").prepend(addRow);
   });
 
 
