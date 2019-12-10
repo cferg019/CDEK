@@ -80,7 +80,9 @@ $(document).ready(function () {
       console.log(teamChoice);
     } else if (activityChoice === "Eat Out") {
       diningChoice = $("#foodType").val().trim();
+      placeChoice = $("#email").val().trim();
       $("#foodType").val("");
+      $("#email").val("");
       console.log(diningChoice);
     } else if (activityChoice === "Have a Drink") {
       placeChoice = $("#email").val().trim();
@@ -91,8 +93,6 @@ $(document).ready(function () {
     // API Code Here
 
     function openBrewery(placeChoice) {
-
-
       var brewryURL = "https://api.openbrewerydb.org/breweries?&by_state=" + placeChoice;
       $.ajax({
         url: brewryURL,
@@ -105,11 +105,7 @@ $(document).ready(function () {
           $('#result').append("<tr><td>" + results[i].name + "</td></tr>");
           $('#result').append("<tr><td>" + results[i].street + ", " + results[i].city + "</td></tr>");
           $('#result').append("<tr><td>" + results[i].website_url + "</td></tr>");
-
-          
-
         }
-
       });
     }
 
@@ -132,11 +128,26 @@ $(document).ready(function () {
       });
     }
 
-    // search function:
+    function fourSquare(diningChoice) {
+      var restaurantURL = "https://api.foursquare.com/v2/venues/explore?&client_id=SYQX3THMILTSYZ3ZIR3SFF5DIADM4GOPYGL0UJU1R1JKC2S0&client_secret=DZRJD3TWWGNM3UBTNCMHVANCRDUUXO5WXWEQU2SYLD231F4Z&query=" + diningChoice + "&limit=10&v=20191209&near=" + placeChoice
+      console.log(restaurantURL)
+      $.ajax({
+        url: restaurantURL,
+        method: "GET"
+      }).then(function (response) {
+        var results = response
+        console.log(response)
+        console.log(results[i].response.groups.items[i].venue[i])
+        // for (var i = 0; i < results.length; i++) {
+        //   $('#result').append("<tr><td>" + results[i].response.groups.items.venue[i] + "</td></tr>");
 
-    openBrewery(placeChoice);
-
-
+        // }
+      });
+    }
+    // call functions:
+    // openBrewery(placeChoice);
+    // ticketMaster(placeChoice);
+    fourSquare(diningChoice)
   });
 
 
