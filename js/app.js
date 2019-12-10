@@ -92,7 +92,7 @@ $(document).ready(function () {
       placeChoice = $("#location").val().trim();
       $("#location").val("");
       // $("#sportsTeam").val("");
-      console.log(teamChoice);
+      // console.log(teamChoice);
       ticketMaster(placeChoice, 'sports')
     } else if (activityChoice === "Eat Out") {
       diningChoice = $("#foodType").val().trim();
@@ -107,6 +107,46 @@ $(document).ready(function () {
       console.log(placeChoice);
       openBrewery(placeChoice);
     }
+
+     //Firebase code 
+     var databaseActivity = activityChoice;
+     var databasePlace = placeChoice;
+     var databaseDining = diningChoice;
+     var inputs;
+     var referencePath;
+
+     console.log(databaseActivity);
+     console.log(databasePlace);
+     console.log(databaseDining);
+
+     if (activityChoice === "See a Concert") {
+       referencePath = "concerts";
+       inputs = {
+         activity: databaseActivity,
+         place: databasePlace,
+       };
+     } else if (activityChoice === "Go to a Game") {
+       referencePath = "game";
+       inputs = {
+         activity: databaseActivity,
+         place: databasePlace,
+       };
+     } else if (activityChoice === "Eat Out") {
+       referencePath = "food";
+       inputs = {
+         activity: databaseActivity,
+         place: databasePlace,
+         dining: databaseDining,
+       };
+     } else if (activityChoice === "Have a Drink") {
+       referencePath = "drink";
+       inputs = {
+         activity: databaseActivity,
+         place: databasePlace,
+       };
+     }
+ 
+     database.ref(referencePath).push(inputs);
 
     // [
     //   {
@@ -165,6 +205,8 @@ $(document).ready(function () {
         //   $('#result').append("<tr><td>" + results[i].street + ", " + results[i].city + "</td></tr>");
         //   $('#result').append("<tr><td>" + results[i].website_url + "</td></tr>");
         // }
+
+
       });
     }
 
@@ -238,6 +280,81 @@ $(document).ready(function () {
     // fourSquare(diningChoice)
   });
 
+  database.ref("concerts").on("child_added", function(childSnapshot) {
+  
+    var databaseActivity = childSnapshot.val().activity;
+    var databasePlace = childSnapshot.val().place;
+
+    console.log(databaseActivity);
+    console.log(databasePlace);
+    console.log("hello");
+
+    var addRow = $("<tr>").append(
+          $("<td>").text(databaseActivity),
+          $("<td>").text(databasePlace),
+          $("<td>").text(""),
+      );
+
+      $("#searches > table > tbody").append(addRow);
+  });
+
+  database.ref("game").on("child_added", function(childSnapshot) {
+  
+    var databaseActivity = childSnapshot.val().activity;
+    var databasePlace = childSnapshot.val().place;
+    
+    console.log(databaseActivity);
+    console.log(databasePlace);
+    console.log("hello");
+
+    var addRow = $("<tr>").append(
+      $("<td>").text(databaseActivity),
+      $("<td>").text(databasePlace),
+      $("<td>").text(""),
+    );
+
+    $("#searches > table > tbody").append(addRow);
+  });
+
+
+  database.ref("food").on("child_added", function(childSnapshot) {
+  
+    var databaseActivity = childSnapshot.val().activity;
+    var databasePlace = childSnapshot.val().place;
+    var databaseDining = childSnapshot.val().dining;
+    
+    console.log(databaseActivity);
+    console.log(databasePlace);
+    console.log(databaseDining);
+    console.log("hello");
+
+    
+    var addRow = $("<tr>").append(
+      $("<td>").text(databaseActivity),
+      $("<td>").text(databasePlace),
+      $("<td>").text(databaseDining),
+    );
+        
+    $("#searches > table > tbody").append(addRow);
+  });
+
+
+  database.ref("drink").on("child_added", function(childSnapshot) {
+  
+    var databaseActivity = childSnapshot.val().activity;
+    var databasePlace = childSnapshot.val().place;
+
+    console.log(databaseActivity);
+    console.log(databasePlace);
+
+    var addRow = $("<tr>").append(
+      $("<td>").text(databaseActivity),
+      $("<td>").text(databasePlace),
+      $("<td>").text(""),
+      );
+
+    $("#searches > table > tbody").append(addRow);
+  });
 
 
 });
