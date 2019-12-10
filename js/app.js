@@ -21,6 +21,7 @@ $(document).ready(function () {
   var artistChoice;
   var teamChoice;
   var diningChoice;
+  var resultDiv = $("#result");
 
   //Initializing drop down menu
   $('select').formSelect();
@@ -88,6 +89,62 @@ $(document).ready(function () {
     }
 
     // API Code Here
+
+    function openBrewery(placeChoice) {
+
+
+      var brewryURL = "https://api.openbrewerydb.org/breweries?&by_state=" + placeChoice;
+      $.ajax({
+        url: brewryURL,
+        method: "GET"
+      }).then(function (response) {
+        console.log(response);
+        var results = response;
+
+        for (var i = 0; i < results.length; i++) {
+          $('#result').append("<tr><td>" + results[i].name + "</td></tr>");
+          $('#result').append("<tr><td>" + results[i].street + ", " + results[i].city + "</td></tr>");
+          $('#result').append("<tr><td>" + results[i].website_url + "</td></tr>");
+
+          
+
+        }
+
+      });
+    }
+
+    function ticketMaster(placeChoice) {
+      var eventURL = "https://app.ticketmaster.com/discovery/v2/events.json?keyword=concert&locale=en-us&city=" + placeChoice + "&apikey=lGxG3vAdLmUCh0Ip0y4Rx2KfHRHxfG5r";
+      $.ajax({
+        url: eventURL,
+        method: "GET"
+      }).then(function (response) {
+
+        var placeChoiceName = $("<p>").append(response.embedded.events.name);
+        var placeChoiceVenues = $("<p>").append(response.embedded.events.venues.name)
+        var placeChoiceUrl = $("<p>").attr("src", response.embedded.events.url);
+        var placeChoiceDate = $("<p>").append(response.embedded.events.date);
+        var placeChoicePrice = $("<p>").append(response.embedded.events.priceRanges.min + response.embedded.events.priceRanges.max)
+
+        $("#result").append(placeChoiceName, placeChoiceVenues, placeChoiceUrl, placeChoiceDate, placeChoicePrice);
+        console.log(placeChoiceName, placeChoiceVenues, placeChoiceUrl, placeChoiceDate, placeChoicePrice);
+        console.log(response);
+      });
+    }
+
+    // search function:
+
+    openBrewery(placeChoice);
+
+
   });
 
+
+
 });
+
+
+
+
+
+
