@@ -6,6 +6,7 @@ $(document).ready(function () {
   var artistChoice;
   var teamChoice;
   var diningChoice;
+  var resultDiv = $("#result");
 
   //Initializing drop down menu
   $('select').formSelect();
@@ -83,36 +84,22 @@ $(document).ready(function () {
         method: "GET"
       }).then(function (response) {
         console.log(response);
-        var results = response.data;
+        var results = response;
 
-        for (var i = 0; i < response.data.length; i++) {
+        for (var i = 0; i < results.length; i++) {
+          $('#result').append("<tr><td>" + results[i].name + "</td></tr>");
+          $('#result').append("<tr><td>" + results[i].street + ", " + results[i].city + "</td></tr>");
+          $('#result').append("<tr><td>" + results[i].website_url + "</td></tr>");
 
-          var resultDiv = $("#result");
-          resultDiv.text(results[i].city)
+          
 
         }
-        // var displayInfo = {
-        //   City: response[i].city,
-        //   Name: response[i].name,
-        //   Address: [response[i].street + response[i].state + response[i].postal_code]
-        // }
-
-        // var newDiv = $("resultsDiv").append(displayInfo);
-        // var stateType = $("<p>").text(response.brewery_type);
-        // var stateCity = $("<p>").text(response.city);
-        // var stateName = $("<p>").text(response.name);
-        // var stateAddress = $("<p>").text(response.street + ", " + response.state + ", " + response.postal_code);
-        // var stateWebsite = $("<p>").attr("src", response.website_url);
-
-        // // $("#result").append(stateType, stateCity, stateName, stateAddress, stateWebsite);
-        // console.log(stateType, stateCity, stateName, stateAddress, stateWebsite);
-
 
       });
     }
 
     function ticketMaster(placeChoice) {
-      var eventURL = "https://app.ticketmaster.com/discovery/v2/events.json?keyword=concert&locale=en-us&apikey=lGxG3vAdLmUCh0Ip0y4Rx2KfHRHxfG5r";
+      var eventURL = "https://app.ticketmaster.com/discovery/v2/events.json?keyword=concert&locale=en-us&city=" + placeChoice + "&apikey=lGxG3vAdLmUCh0Ip0y4Rx2KfHRHxfG5r";
       $.ajax({
         url: eventURL,
         method: "GET"
@@ -122,9 +109,10 @@ $(document).ready(function () {
         var placeChoiceVenues = $("<p>").append(response.embedded.events.venues.name)
         var placeChoiceUrl = $("<p>").attr("src", response.embedded.events.url);
         var placeChoiceDate = $("<p>").append(response.embedded.events.date);
-        var placeChoice = $("<p>").append(response.embedded.events.priceRanges.min + response.embedded.events.priceRanges.max)
+        var placeChoicePrice = $("<p>").append(response.embedded.events.priceRanges.min + response.embedded.events.priceRanges.max)
 
-
+        $("#result").append(placeChoiceName, placeChoiceVenues, placeChoiceUrl, placeChoiceDate, placeChoicePrice);
+        console.log(placeChoiceName, placeChoiceVenues, placeChoiceUrl, placeChoiceDate, placeChoicePrice);
         console.log(response);
       });
     }
