@@ -88,6 +88,168 @@ $(document).ready(function () {
     }
 
     // API Code Here
+    function openBrewery(placeChoice) {
+      var brewryURL = "https://api.openbrewerydb.org/breweries?&by_state=" + placeChoice;
+      $.ajax({
+        url: brewryURL,
+        method: "GET"
+      }).then(function (response) {
+        console.log(response);
+        var results = response;
+
+        for (var i = 0; i < results.length; i++) {
+          $('#result').append("<tr><td>" + results[i].name + "</td></tr>");
+          $('#result').append("<tr><td>" + results[i].street + ", " + results[i].city + "</td></tr>");
+          $('#result').append("<tr><td>" + results[i].website_url + "</td></tr>");
+        }
+
+      });
+    }
+
+    function ticketMaster(placeChoice) {
+      var eventURL = "https://app.ticketmaster.com/discovery/v2/events.json?keyword=concert&locale=en-us&city=" + placeChoice + "&apikey=lGxG3vAdLmUCh0Ip0y4Rx2KfHRHxfG5r";
+      $.ajax({
+        url: eventURL,
+        method: "GET"
+      }).then(function (response) {
+
+        var placeChoiceName = $("<p>").append(response.embedded.events.name);
+        var placeChoiceVenues = $("<p>").append(response.embedded.events.venues.name)
+        var placeChoiceUrl = $("<p>").attr("src", response.embedded.events.url);
+        var placeChoiceDate = $("<p>").append(response.embedded.events.date);
+        var placeChoicePrice = $("<p>").append(response.embedded.events.priceRanges.min + response.embedded.events.priceRanges.max)
+
+        $("#result").append(placeChoiceName, placeChoiceVenues, placeChoiceUrl, placeChoiceDate, placeChoicePrice);
+        console.log(placeChoiceName, placeChoiceVenues, placeChoiceUrl, placeChoiceDate, placeChoicePrice);
+        console.log(response);
+      });
+    } 
+    // search function:
+
+    openBrewery(placeChoice);
+    
+
+    //Firebase code 
+      event.preventDefault();
+  
+      var databaseActivity = activityChoice;
+      var databasePlace = placeChoice;
+      var databaseArtist = artistChoice;
+      var databaseTeam = teamChoice;
+      var databaseDining = diningChoice;
+      var inputs;
+      var referencePath;
+
+      if (activityChoice === "See a Concert") {
+        referencePath = "concerts";
+        inputs = {
+          activity: databaseActivity,
+          place: databasePlace,
+          artist: databaseArtist,
+        };
+      } else if (activityChoice === "Go to a Game") {
+        referencePath = "game";
+        inputs = {
+          activity: databaseActivity,
+          place: databasePlace,
+          team: databaseTeam,
+        };
+      } else if (activityChoice === "Eat Out") {
+        referencePath = "food";
+        inputs = {
+          activity: databaseActivity,
+          place: databasePlace,
+          dining: databaseDining,
+        };
+      } else if (activityChoice === "Have a Drink") {
+        referencePath = "drink";
+        inputs = {
+          activity: databaseActivity,
+          place: databasePlace,
+        };
+      }
+  
+      database.ref(referencePath).push(inputs);
   });
+  
+  database.ref("concerts").on("child_added", function(childSnapshot) {
+  
+    var databaseActivity = childSnapshot.val().activity;
+    var databasePlace = childSnapshot.val().place;
+    var databaseArtist = childSnapshot.val().artist;
+
+    console.log(databaseActivity);
+    console.log(databasePlace);
+    console.log(databaseArtist);
+
+    var addRow = $("<tr>").append(
+          $("<td>").text(databaseActivity),
+          $("<td>").text(databasePlace),
+          $("<td>").text(databaseArtist),
+      );
+
+      $("#searches > table > tbody").append(addRow);
+  });
+
+  database.ref("game").on("child_added", function(childSnapshot) {
+  
+    var databaseActivity = childSnapshot.val().activity;
+    var databasePlace = childSnapshot.val().place;
+    var databaseTeam = childSnapshot.val().team;
+    
+    console.log(databaseActivity);
+    console.log(databasePlace);
+    console.log(databaseTeam);
+
+    var addRow = $("<tr>").append(
+      $("<td>").text(databaseActivity),
+      $("<td>").text(databasePlace),
+      $("<td>").text(databaseTeam),
+    );
+
+    $("#searches > table > tbody").append(addRow);
+  });
+
+
+  database.ref("food").on("child_added", function(childSnapshot) {
+  
+    var databaseActivity = childSnapshot.val().activity;
+    var databasePlace = childSnapshot.val().place;
+    var databaseDining = childSnapshot.val().dining;
+    
+    console.log(databaseActivity);
+    console.log(databasePlace);
+    console.log(databaseDining);
+
+    
+    var addRow = $("<tr>").append(
+      $("<td>").text(databaseActivity),
+      $("<td>").text(databasePlace),
+      $("<td>").text(databaseDining),
+    );
+        
+    $("#searches > table > tbody").append(addRow);
+  });
+
+
+  database.ref("drink").on("child_added", function(childSnapshot) {
+  
+    var databaseActivity = childSnapshot.val().activity;
+    var databasePlace = childSnapshot.val().place;
+
+    console.log(databaseActivity);
+    console.log(databasePlace);
+
+    var addRow = $("<tr>").append(
+      $("<td>").text(databaseActivity),
+      $("<td>").text(databasePlace),
+      $("<td>").text(""),
+      );
+
+    $("#searches > table > tbody").append(addRow);
+    
+  });
+
+
 
 });
