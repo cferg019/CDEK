@@ -99,11 +99,13 @@ $(document).ready(function () {
       placeChoice = $("#location").val().trim();
       $("#foodType").val("");
       $("#location").val("");
+
       console.log(diningChoice);
       fourSquare(placeChoice, diningChoice);
     } else if (activityChoice === "Have a Drink") {
       placeChoice = $("#location").val().trim();
       $("#location").val("");
+
       console.log(placeChoice);
       openBrewery(placeChoice);
     }
@@ -153,6 +155,7 @@ $(document).ready(function () {
     //     title: 'string',
     //     location: 'string',
     //     url: 'string',
+    //     imgURL: 'string'
     //     desc: ''
     //   }, {
     //       ...
@@ -163,18 +166,49 @@ $(document).ready(function () {
     function showResults(results) {
       console.log('showing results', results)
       for (var i = 0; i < results.length; i++) {
-        $('#result').append("<tr><td>" + results[i].title + "</td></tr>");
-        $('#result').append("<tr><td>" + results[i].location + "</td></tr>");
-        // Url is optional
-        if (results.url) {
-          $('#result').append("<tr><td>" + results[i].url + "</td></tr>");
-        }
-        // Desctiption is optional, only append if we have one
-        if (results.desc) {
-          $('#result').append("<tr><td>" + results[i].desc + "</td></tr>");
-        }
-        $('#result').append("<hr/>");
+        // $('#result').append("<tr><td>" + results[i].title + "</td></tr>");
+        // $('#result').append("<tr><td>" + results[i].location + "</td></tr>");
+        // // Url is optional
+        // if (results.url) {
+        //   $('#result').append("<tr><td>" + results[i].url + "</td></tr>");
+        // }
+        // // Desctiption is optional, only append if we have one
+        // if (results.desc) {
+        //   $('#result').append("<tr><td>" + results[i].desc + "</td></tr>");
+        // }
+        if (!results[i].imgURL) { results[i].imgURL = 'https://d17fnq9dkz9hgj.cloudfront.net/uploads/2018/04/Bulldog_02.jpg'}
+        $('#result').append(resultsRow(results[i]));
       }
+    }
+
+    function resultsRow(result) {
+      var rowPart1 = '<div class="row">' +
+        '<div class="col s12 m12">' + 
+            '<div class="card horizontal">' + 
+                '<div class="card-image" style="">' + 
+                    '<img style="object-fit: cover; max-width: 220px; max-height: 220px; height: 100%;" src="' + result.imgURL + '">' + 
+                '</div>' + 
+                '<div class="card-stacked">' + 
+                    '<div class="card-content">' + 
+                        '<h6 style="font-weight: bold;">' + result.title + '</h6>' + 
+                        '<p>' + result.location + '</p>' + 
+                        '<p>' + result.desc + '</p>' + 
+                    '</div>';
+      
+      if (result.url) {
+        rowPart1 = rowPart1 + 
+          '<div class="card-action">' + 
+            '<a href="' + result.url + '">Link</a>' + 
+          '</div>';
+      }
+                    
+      var rowPart2 =
+            '</div>' +
+          '</div>' + 
+        '</div>' + 
+      '</div>';
+      var row = rowPart1 + rowPart2
+      return row;
     }
 
     // API Code Here
@@ -193,7 +227,9 @@ $(document).ready(function () {
           results.push({
             title: response[i].name,
             location: response[i].street + ", " + response[i].city,
-            url: response[i].website_url
+            url: response[i].website_url,
+            imgURL: 'https://d3m7xw68ay40x8.cloudfront.net/assets/2019/08/02145655/august-2019-beer-events-guide.jpg',
+            desc: ''
           })
         }
 
@@ -225,6 +261,8 @@ $(document).ready(function () {
             title: events[i].name,
             location: events[i]._embedded.venues[0].name,
             url: events[i].url,
+            imgURL: events[i].images[0].url,
+            desc: ''
           }
           if (events[i].priceRanges) {
             result.desc = 'Tickets will run you anywhere from $' + events[i].priceRanges[0].min + ' to $' + events[i].priceRanges[0].max
@@ -261,7 +299,9 @@ $(document).ready(function () {
         for (var i = 0; i < items.length; i++) {
           var result = {
             title: items[i].venue.name,
-            location: items[i].venue.location.formattedAddress.join(', ')
+            location: items[i].venue.location.formattedAddress.join(', '),
+            imgURL: 'https://cdn4.iconfinder.com/data/icons/social-media-logos-6/512/73-foursquare-512.png',
+            desc: ''
           }
           results.push(result)
         }
