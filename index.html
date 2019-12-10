@@ -5,13 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-app.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Bebas+Neue|Bungee+Inline|Dosis:800|Modak|Nunito:700&display=swap" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="css/materialize.css"> -->
-    <!-- <script type="text/javascript" src="js/materialize.js"></script> -->
+    <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-database.js"></script>
 
     <!-- Materialize -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
@@ -43,7 +42,7 @@
         <!-- secondary questions -->
         <div class="row">
             <div class="input-field col s8 offset-s2" id="artist">
-                <input id="concertArtist" type="text" class="validate">
+                <input id="concertArtist" type="text" class="validate" required="required">
                 <label for="concertArtist">Have an artist in mind?</label>
             </div>
         </div>

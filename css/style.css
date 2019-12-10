@@ -60,13 +60,18 @@ input.datepicker {
     cursor: pointer;
 }
 
-footer {
-    background-color: #d50000;
-    color: white;
-    text-align: center;
-    margin-top: 50px;
-}
-
 .no-click {
     pointer-events: none;
+}
+
+footer {
+    position: fixed;
+    padding: 10px 10px 10px 10px;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: white;
+    text-align: center;
+    background-color: #d50000;
+    margin-top: 50px;
 }
