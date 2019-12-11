@@ -99,14 +99,8 @@ $(document).ready(function () {
     var inputs;
     var referencePath;
 
-    if (activityChoice === "See a Concert") {
-      referencePath = "concerts";
-      inputs = {
-        activity: databaseActivity,
-        place: databasePlace,
-      };
-    } else if (activityChoice === "Go to a Game") {
-      referencePath = "game";
+    if ((activityChoice === "See a Concert") || (activityChoice === "Go to a Game") || (activityChoice === "Have a Drink")) {
+      referencePath = "not-food";
       inputs = {
         activity: databaseActivity,
         place: databasePlace,
@@ -117,12 +111,6 @@ $(document).ready(function () {
         activity: databaseActivity,
         place: databasePlace,
         dining: databaseDining,
-      };
-    } else if (activityChoice === "Have a Drink") {
-      referencePath = "drink";
-      inputs = {
-        activity: databaseActivity,
-        place: databasePlace,
       };
     }
 
@@ -147,7 +135,6 @@ $(document).ready(function () {
   function showResults(results) {
     console.log('showing results', results)
     for (var i = 0; i < results.length; i++) {
-      if (!results[i].imgURL) { results[i].imgURL = 'https://d17fnq9dkz9hgj.cloudfront.net/uploads/2018/04/Bulldog_02.jpg' }
       $('#result').append(resultsRow(results[i]));
     }
   }
@@ -265,21 +252,7 @@ $(document).ready(function () {
     })
   }
 
-  database.ref("concerts").on("child_added", function (childSnapshot) {
-
-    var databaseActivity = childSnapshot.val().activity;
-    var databasePlace = childSnapshot.val().place;
-
-    var addRow = $("<tr>").prepend(
-      $("<td>").text(databaseActivity),
-      $("<td>").text(databasePlace),
-      $("<td>").text(""),
-    );
-
-    $("#searches > table > tbody").prepend(addRow);
-  });
-
-  database.ref("game").on("child_added", function (childSnapshot) {
+  database.ref("not-food").on("child_added", function (childSnapshot) {
 
     var databaseActivity = childSnapshot.val().activity;
     var databasePlace = childSnapshot.val().place;
@@ -308,17 +281,4 @@ $(document).ready(function () {
     $("#searches > table > tbody").prepend(addRow);
   });
 
-  database.ref("drink").on("child_added", function (childSnapshot) {
-
-    var databaseActivity = childSnapshot.val().activity;
-    var databasePlace = childSnapshot.val().place;
-
-    var addRow = $("<tr>").prepend(
-      $("<td>").text(databaseActivity),
-      $("<td>").text(databasePlace),
-      $("<td>").text(""),
-    );
-
-    $("#searches > table > tbody").prepend(addRow);
-  });
 });
