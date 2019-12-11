@@ -18,10 +18,7 @@ $(document).ready(function () {
   // Declaring variables to be used in API search
   var activityChoice;
   var placeChoice;
-  var artistChoice;
-  var teamChoice;
   var diningChoice;
-  var resultDiv = $("#result");
 
   //Initializing drop down menu
   $('select').formSelect();
@@ -29,10 +26,6 @@ $(document).ready(function () {
   // hiding question divs other than "what are you in the mood for"
   $("#when").hide();
   $("#where").hide();
-  // $("#submit-button").hide();
-  // $("#next-button").hide();
-  // $("#artist").hide();
-  // $("#team").hide();
   $("#dining").hide();
   $("#results-button").hide();
 
@@ -43,8 +36,6 @@ $(document).ready(function () {
     // Clear the results when they choose a new option from the dropdown
     $("#result").empty()
     // Hide all of the activity specific inputs first
-    // $("#artist").hide();
-    // $("#team").hide();
     $("#dining").hide();
     // They all have a where, so always show the where
     $("#where").show();
@@ -56,311 +47,278 @@ $(document).ready(function () {
     }
   });
 
-  // We can now get rid of this whole function, since we only have a single
-  // Results button, we no longer need to deal with navigation
-
-  // When next button is selected, the place chosen is stored, this div is hidden, and the div with the next question is shown.
-  // $("#submit-button").on("click", function () {
-  //   placeChoice = $("#location").val().trim();
-  //   console.log(placeChoice);
-  //   $("#where").hide();
-  //   $("#next-button").hide();
-  //   $("#results-button").show();
-  //   $("#submit-button").hide();
-
-  //   if (activityChoice === "See a Concert") {
-  //     $("#artist").show();
-  //   } else if (activityChoice === "Go to a Game") {
-  //     $("#team").show();
-  //   } else if (activityChoice === "Eat Out") {
-  //     $("#dining").show();
-  //   }
-  // });
-
   // Final information is stored.  Begin API query.
   $("#results-button").on("click", function () {
     $("#result").empty()
+    $("#inputErrorMessage").text("");
+    var wasValid = false;
     if (activityChoice === "See a Concert") {
-      // artistChoice = $("#concertArtist").val().trim();
       placeChoice = $("#location").val().trim();
       $("#location").val("");
-      // $("#concertArtist").val("");
-      ticketMaster(placeChoice, 'music')
-      console.log(artistChoice, placeChoice);
+      if (placeChoice !== "") {
+        ticketMaster(placeChoice, 'music')
+        wasValid = true
+      } else {
+        $("#inputErrorMessage").text("Please fill in all fields.");
+      }
     } else if (activityChoice === "Go to a Game") {
-      // teamChoice = $("#sportsTeam").val().trim();
       placeChoice = $("#location").val().trim();
       $("#location").val("");
-      // $("#sportsTeam").val("");
-      // console.log(teamChoice);
-      ticketMaster(placeChoice, 'sports')
+      if (placeChoice !== "") {
+        ticketMaster(placeChoice, 'sports');
+        wasValid = true;
+      } else {
+        $("#inputErrorMessage").text("Please fill in all fields.");
+      }
     } else if (activityChoice === "Eat Out") {
       diningChoice = $("#foodType").val().trim();
       placeChoice = $("#location").val().trim();
       $("#foodType").val("");
       $("#location").val("");
-      console.log(diningChoice);
-      fourSquare(placeChoice, diningChoice);
+      if (diningChoice !== "" && placeChoice !== "") {
+        fourSquare(placeChoice, diningChoice);
+        wasValid = true;
+      } else {
+        $("#inputErrorMessage").text("Please fill in all fields.");
+      }
     } else if (activityChoice === "Have a Drink") {
       placeChoice = $("#location").val().trim();
       $("#location").val("");
-      console.log(placeChoice);
-      openBrewery(placeChoice);
+      if (placeChoice !== "") {
+        openBrewery(placeChoice);
+        wasValid = true;
+      } else {
+        $("#inputErrorMessage").text("Please fill in all fields.");
+      };
+    };
+
+    //Firebase code 
+    var databaseActivity = activityChoice;
+    var databasePlace = placeChoice;
+    var databaseDining = diningChoice;
+    var inputs;
+    var referencePath;
+
+    if (activityChoice === "See a Concert") {
+      referencePath = "concerts";
+      inputs = {
+        activity: databaseActivity,
+        place: databasePlace,
+      };
+    } else if (activityChoice === "Go to a Game") {
+      referencePath = "game";
+      inputs = {
+        activity: databaseActivity,
+        place: databasePlace,
+      };
+    } else if (activityChoice === "Eat Out") {
+      referencePath = "food";
+      inputs = {
+        activity: databaseActivity,
+        place: databasePlace,
+        dining: databaseDining,
+      };
+    } else if (activityChoice === "Have a Drink") {
+      referencePath = "drink";
+      inputs = {
+        activity: databaseActivity,
+        place: databasePlace,
+      };
     }
 
-     //Firebase code 
-     var databaseActivity = activityChoice;
-     var databasePlace = placeChoice;
-     var databaseDining = diningChoice;
-     var inputs;
-     var referencePath;
+    if (wasValid) {
+      database.ref(referencePath).push(inputs);
+    }
+  });
 
-     console.log(databaseActivity);
-     console.log(databasePlace);
-     console.log(databaseDining);
+  // [
+  //   {
+  //     title: 'string',
+  //     location: 'string',
+  //     url: 'string',
+  //     imgURL: 'string'
+  //     desc: ''
+  //   }, {
+  //       ...
+  //   }
+  // ]
+  // This function will now be used as the one point in the code
+  // where we show the results on the screen
+  function showResults(results) {
+    console.log('showing results', results)
+    for (var i = 0; i < results.length; i++) {
+      if (!results[i].imgURL) { results[i].imgURL = 'https://d17fnq9dkz9hgj.cloudfront.net/uploads/2018/04/Bulldog_02.jpg' }
+      $('#result').append(resultsRow(results[i]));
+    }
+  }
 
-     if (activityChoice === "See a Concert") {
-       referencePath = "concerts";
-       inputs = {
-         activity: databaseActivity,
-         place: databasePlace,
-       };
-     } else if (activityChoice === "Go to a Game") {
-       referencePath = "game";
-       inputs = {
-         activity: databaseActivity,
-         place: databasePlace,
-       };
-     } else if (activityChoice === "Eat Out") {
-       referencePath = "food";
-       inputs = {
-         activity: databaseActivity,
-         place: databasePlace,
-         dining: databaseDining,
-       };
-     } else if (activityChoice === "Have a Drink") {
-       referencePath = "drink";
-       inputs = {
-         activity: databaseActivity,
-         place: databasePlace,
-       };
-     }
- 
-     database.ref(referencePath).push(inputs);
+  function resultsRow(result) {
+    var rowPart1 = '<div class="row">' +
+      '<div class="col s12 m12">' +
+      '<div class="card horizontal">' +
+      '<div class="card-image" style="">' +
+      '<img style="object-fit: cover; max-width: 220px; max-height: 220px; height: 100%;" src="' + result.imgURL + '">' +
+      '</div>' +
+      '<div class="card-stacked">' +
+      '<div class="card-content">' +
+      '<h6 style="font-weight: bold;">' + result.title + '</h6>' +
+      '<p>' + result.location + '</p>' +
+      '<p>' + result.desc + '</p>' +
+      '</div>' +
+      '<div class="card-action">';
 
-    // [
-    //   {
-    //     title: 'string',
-    //     location: 'string',
-    //     url: 'string',
-    //     desc: ''
-    //   }, {
-    //       ...
-    //   }
-    // ]
-    // This function will now be used as the one point in the code
-    // where we show the results on the screen
-    function showResults(results) {
-      console.log('showing results', results)
-      for (var i = 0; i < results.length; i++) {
-        $('#result').append("<tr><td>" + results[i].title + "</td></tr>");
-        $('#result').append("<tr><td>" + results[i].location + "</td></tr>");
-        // Url is optional
-        if (results.url) {
-          $('#result').append("<tr><td>" + results[i].url + "</td></tr>");
-        }
-        // Desctiption is optional, only append if we have one
-        if (results.desc) {
-          $('#result').append("<tr><td>" + results[i].desc + "</td></tr>");
-        }
-        $('#result').append("<hr/>");
+    if (result.url) {
+      rowPart1 = rowPart1 +
+        '<a href="' + result.url + '">Link</a>';
+    }
+
+    var rowPart2 =
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '</div>';
+    var row = rowPart1 + rowPart2
+    return row;
+  }
+
+  // API Code Here
+  function openBrewery(placeChoice) {
+    var brewryURL = "https://api.openbrewerydb.org/breweries?&by_state=" + placeChoice;
+    $.ajax({
+      url: brewryURL,
+      method: "GET"
+    }).then(function (response) {
+      console.log(response);
+      var results = [];
+
+      // We'll make a standard object to store results so we can call "showResults" in each API function
+      for (var i = 0; i < response.length; i++) {
+        results.push({
+          title: response[i].name,
+          location: response[i].street + ", " + response[i].city,
+          url: response[i].website_url,
+          imgURL: 'https://d3m7xw68ay40x8.cloudfront.net/assets/2019/08/02145655/august-2019-beer-events-guide.jpg',
+          desc: ''
+        })
       }
-    }
 
-    // API Code Here
+      // Show the results on the screen
+      showResults(results)
 
-    function openBrewery(placeChoice) {
-      var brewryURL = "https://api.openbrewerydb.org/breweries?&by_state=" + placeChoice;
-      $.ajax({
-        url: brewryURL,
-        method: "GET"
-      }).then(function (response) {
-        console.log(response);
-        var results = [];
+    });
+  }
 
-        // We'll make a standard object to store results so we can call "showResults" in each API function
-        for (var i = 0; i < response.length; i++) {
-          results.push({
-            title: response[i].name,
-            location: response[i].street + ", " + response[i].city,
-            url: response[i].website_url
-          })
+  function ticketMaster(placeChoice, event) {
+    var eventURL = "https://app.ticketmaster.com/discovery/v2/events.json?keyword=" + event + "&locale=en-us&city=" + placeChoice + "&radius=50&apikey=lGxG3vAdLmUCh0Ip0y4Rx2KfHRHxfG5r";
+    $.ajax({
+      url: eventURL,
+      method: "GET"
+    }).then(function (response) {
+      console.log(response);
+      var results = [];
+      var events = response._embedded.events
+      // We'll make a standard object to store results so we can call "showResults" in each API function
+      for (var i = 0; i < events.length; i++) {
+        var result = {
+          title: events[i].name,
+          location: events[i]._embedded.venues[0].name,
+          url: events[i].url,
+          imgURL: events[i].images[0].url,
+          desc: ''
         }
-
-        // Show the results on the screen
-        showResults(results)
-
-        // for (var i = 0; i < results.length; i++) {
-        //   $('#result').append("<tr><td>" + results[i].name + "</td></tr>");
-        //   $('#result').append("<tr><td>" + results[i].street + ", " + results[i].city + "</td></tr>");
-        //   $('#result').append("<tr><td>" + results[i].website_url + "</td></tr>");
-        // }
-
-
-      });
-    }
-
-    function ticketMaster(placeChoice, event) {
-      var eventURL = "https://app.ticketmaster.com/discovery/v2/events.json?keyword=" + event + "&locale=en-us&city=" + placeChoice + "&radius=50&apikey=lGxG3vAdLmUCh0Ip0y4Rx2KfHRHxfG5r";
-      $.ajax({
-        url: eventURL,
-        method: "GET"
-      }).then(function (response) {
-        console.log(response);
-        var results = [];
-        var events = response._embedded.events
-        // We'll make a standard object to store results so we can call "showResults" in each API function
-        for (var i = 0; i < events.length; i++) {
-          var result = {
-            title: events[i].name,
-            location: events[i]._embedded.venues[0].name,
-            url: events[i].url,
-          }
-          if (events[i].priceRanges) {
-            result.desc = 'Tickets will run you anywhere from $' + events[i].priceRanges[0].min + ' to $' + events[i].priceRanges[0].max
-          }
-          results.push(result)
+        if (events[i].priceRanges) {
+          result.desc = 'Tickets will run you anywhere from $' + events[i].priceRanges[0].min + ' to $' + events[i].priceRanges[0].max
         }
+        results.push(result)
+      }
 
-        // Show the results on the screen
-        showResults(results)
+      // Show the results on the screen
+      showResults(results)
 
-        // var placeChoiceName = $("<p>").append(response.embedded.events.name);
-        // var placeChoiceVenues = $("<p>").append(response.embedded.events.venues.name)
-        // var placeChoiceUrl = $("<p>").attr("src", response.embedded.events.url);
-        // var placeChoiceDate = $("<p>").append(response.embedded.events.date);
-        // var placeChoicePrice = $("<p>").append(response.embedded.events.priceRanges.min + response.embedded.events.priceRanges.max)
+    });
+  }
 
-        // $("#result").append(placeChoiceName, placeChoiceVenues, placeChoiceUrl, placeChoiceDate, placeChoicePrice);
-        // console.log(placeChoiceName, placeChoiceVenues, placeChoiceUrl, placeChoiceDate, placeChoicePrice);
-        // console.log(response);
-      });
-    }
-
-    function fourSquare(placeChoice, diningChoice) {
-      var restaurantURL = "https://api.foursquare.com/v2/venues/explore?&client_id=SYQX3THMILTSYZ3ZIR3SFF5DIADM4GOPYGL0UJU1R1JKC2S0&client_secret=DZRJD3TWWGNM3UBTNCMHVANCRDUUXO5WXWEQU2SYLD231F4Z&query=" + diningChoice + "&limit=10&v=20191209&near=" + placeChoice
-      console.log(restaurantURL)
-      $.ajax({
-        url: restaurantURL,
-        method: "GET"
-      }).then(function (response) {
-        console.log(response);
-        var results = [];
-        var items = response.response.groups[0].items
-        // We'll make a standard object to store results so we can call "showResults" in each API function
-        for (var i = 0; i < items.length; i++) {
-          var result = {
-            title: items[i].venue.name,
-            location: items[i].venue.location.formattedAddress.join(', ')
-          }
-          results.push(result)
+  function fourSquare(placeChoice, diningChoice) {
+    var restaurantURL = "https://api.foursquare.com/v2/venues/explore?&client_id=SYQX3THMILTSYZ3ZIR3SFF5DIADM4GOPYGL0UJU1R1JKC2S0&client_secret=DZRJD3TWWGNM3UBTNCMHVANCRDUUXO5WXWEQU2SYLD231F4Z&query=" + diningChoice + "&limit=10&v=20191209&near=" + placeChoice
+    console.log(restaurantURL)
+    $.ajax({
+      url: restaurantURL,
+      method: "GET"
+    }).then(function (response) {
+      console.log(response);
+      var results = [];
+      var items = response.response.groups[0].items
+      // We'll make a standard object to store results so we can call "showResults" in each API function
+      for (var i = 0; i < items.length; i++) {
+        var result = {
+          title: items[i].venue.name,
+          location: items[i].venue.location.formattedAddress.join(', '),
+          imgURL: 'https://is5-ssl.mzstatic.com/image/thumb/Purple113/v4/0c/e4/f2/0ce4f225-605e-dfed-c858-00d31ce39e5f/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/246x0w.png',
+          desc: ''
         }
+        results.push(result)
+      }
 
-        // Show the results on the screen
-        showResults(results)
-        // for (var i = 0; i < results.length; i++) {
-        //   $('#result').append("<tr><td>" + results[i].response.groups.items.venue[i] + "</td></tr>");
+      // Show the results on the screen
+      showResults(results)
+    })
+  }
 
-        // }
-      })
-    }
-    // call functions:
-    // openBrewery(placeChoice);
-    // ticketMaster(artistChoice);
-    // fourSquare(diningChoice)
-  });
+  database.ref("concerts").on("child_added", function (childSnapshot) {
 
-  database.ref("concerts").on("child_added", function(childSnapshot) {
-  
     var databaseActivity = childSnapshot.val().activity;
     var databasePlace = childSnapshot.val().place;
 
-    console.log(databaseActivity);
-    console.log(databasePlace);
-    console.log("hello");
-
-    var addRow = $("<tr>").append(
-          $("<td>").text(databaseActivity),
-          $("<td>").text(databasePlace),
-          $("<td>").text(""),
-      );
-
-      $("#searches > table > tbody").append(addRow);
-  });
-
-  database.ref("game").on("child_added", function(childSnapshot) {
-  
-    var databaseActivity = childSnapshot.val().activity;
-    var databasePlace = childSnapshot.val().place;
-    
-    console.log(databaseActivity);
-    console.log(databasePlace);
-    console.log("hello");
-
-    var addRow = $("<tr>").append(
+    var addRow = $("<tr>").prepend(
       $("<td>").text(databaseActivity),
       $("<td>").text(databasePlace),
       $("<td>").text(""),
     );
 
-    $("#searches > table > tbody").append(addRow);
+    $("#searches > table > tbody").prepend(addRow);
   });
 
+  database.ref("game").on("child_added", function (childSnapshot) {
 
-  database.ref("food").on("child_added", function(childSnapshot) {
-  
+    var databaseActivity = childSnapshot.val().activity;
+    var databasePlace = childSnapshot.val().place;
+
+    var addRow = $("<tr>").prepend(
+      $("<td>").text(databaseActivity),
+      $("<td>").text(databasePlace),
+      $("<td>").text(""),
+    );
+
+    $("#searches > table > tbody").prepend(addRow);
+  });
+
+  database.ref("food").on("child_added", function (childSnapshot) {
+
     var databaseActivity = childSnapshot.val().activity;
     var databasePlace = childSnapshot.val().place;
     var databaseDining = childSnapshot.val().dining;
-    
-    console.log(databaseActivity);
-    console.log(databasePlace);
-    console.log(databaseDining);
-    console.log("hello");
 
-    
-    var addRow = $("<tr>").append(
+    var addRow = $("<tr>").prepend(
       $("<td>").text(databaseActivity),
       $("<td>").text(databasePlace),
       $("<td>").text(databaseDining),
     );
-        
-    $("#searches > table > tbody").append(addRow);
+
+    $("#searches > table > tbody").prepend(addRow);
   });
 
+  database.ref("drink").on("child_added", function (childSnapshot) {
 
-  database.ref("drink").on("child_added", function(childSnapshot) {
-  
     var databaseActivity = childSnapshot.val().activity;
     var databasePlace = childSnapshot.val().place;
 
-    console.log(databaseActivity);
-    console.log(databasePlace);
-
-    var addRow = $("<tr>").append(
+    var addRow = $("<tr>").prepend(
       $("<td>").text(databaseActivity),
       $("<td>").text(databasePlace),
       $("<td>").text(""),
-      );
+    );
 
-    $("#searches > table > tbody").append(addRow);
+    $("#searches > table > tbody").prepend(addRow);
   });
-
-
 });
-
-
-
-
-
-
