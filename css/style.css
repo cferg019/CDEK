@@ -29,15 +29,6 @@ h1 {
     border-bottom: 1px solid #d50000;
 }
 
-/* datepicker formatting */
-.btn-flat.datepicker-cancel,.btn-flat.datepicker-done, .datepicker-table td.is-today {
-    color: #d50000;
-}
-
-.datepicker-date-display {
-    background-color: #d50000;
-}
-
 input:not([type]):focus:not([readonly]), input[type=text]:not(.browser-default):focus:not([readonly]), input[type=email]:not(.browser-default):focus:not([readonly]) {
     border-bottom: .5px solid #d50000;
     box-shadow: 0 1px 0 0 #d50000;
